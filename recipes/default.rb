@@ -142,7 +142,7 @@ end
 case node['platform_family']
 when "debian"
   package ["libkrb5-dev", "libsasl2-dev"]
-when "rhel"
+when "rhel", "amazon"
   package ["krb5-devel", "krb5-workstation", "cyrus-sasl-devel"]
 end
 

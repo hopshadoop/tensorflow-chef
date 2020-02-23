@@ -170,9 +170,16 @@ when "debian"
 
   package ["pkg-config", "zip", "g++", "zlib1g-dev", "unzip", "swig", "git", "build-essential", "cmake", "unzip", "libopenblas-dev", "liblapack-dev", "linux-image-#{node['kernel']['release']}", "linux-headers-#{node['kernel']['release']}", "python2.7", "python2.7-numpy", "python2.7-dev", "python-pip", "python2.7-lxml", "python-pillow", "libcupti-dev", "libcurl3-dev", "python-wheel", "python-six", "pciutils"]
 
-when "rhel"
-  if node['rhel']['epel'].downcase == "true"
+when "rhel", "amazon"
+  if node['rhel']['epel'].downcase == "true" && node['platform_family'].eql?("rhel")
     package 'epel-release'
+  elsif node['rhel']['epel'].downcase == "true" && node['platform_family'].eql?("amazon")
+    bash "install_epel_amazon" do 
+      user "root"
+      code <<-EOH
+        amazon-linux-extras install epel
+      EOH
+    end
   end
 
   # With our current CentOS box "CentOS Linux release 7.5.1804 (Core)",
